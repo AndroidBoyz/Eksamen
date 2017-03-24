@@ -17,10 +17,6 @@ public class Login extends AppCompatActivity {
     LoginButton loginButton;
     CallbackManager callbackManager;
 
-    //git test
-    // HALLO
-    // Test men altså hva faen ?!
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
