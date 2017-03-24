@@ -18,6 +18,8 @@ public class Login extends AppCompatActivity {
     CallbackManager callbackManager;
 
     //git test
+    // HALLO
+    // Test men altså hva faen ?!
 
 
     @Override
