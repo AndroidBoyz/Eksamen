@@ -18,11 +18,13 @@ public class Login extends AppCompatActivity {
     CallbackManager callbackManager;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_fblogin);
+        final Intent i =  new Intent(this, MinSide.class);
 
 
         loginButton = (LoginButton)findViewById(R.id.login_button);
@@ -34,6 +36,13 @@ public class Login extends AppCompatActivity {
                 text.setText("Login success! \n" +
                 loginResult.getAccessToken().getUserId()+
                 "\n"+loginResult.getAccessToken().getToken());
+
+
+                i.putExtra("result",loginResult.getAccessToken().getToken());
+                i.putExtra("userID", loginResult.getAccessToken().getUserId());
+
+                startActivity(i);
+
             }
 
             @Override
