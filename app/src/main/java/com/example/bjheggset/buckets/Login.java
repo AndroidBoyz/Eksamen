@@ -1,5 +1,6 @@
 package com.example.bjheggset.buckets;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ public class Login extends AppCompatActivity {
     TextView text;
     LoginButton loginButton;
     CallbackManager callbackManager;
+
 
 
 
@@ -38,8 +40,13 @@ public class Login extends AppCompatActivity {
                 "\n"+loginResult.getAccessToken().getToken());
 
 
+
+
                 i.putExtra("result",loginResult.getAccessToken().getToken());
-                i.putExtra("userID", loginResult.getAccessToken().getUserId());
+              //  i.putExtra("userID", loginResult.getAccessToken().getUserId());
+
+
+
 
                 startActivity(i);
 
