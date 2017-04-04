@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/plus_icon"
+        android:onClick="ItemActivity"
         android:layout_marginBottom="52dp"
         android:id="@+id/imageButton"
         android:layout_alignParentBottom="true"

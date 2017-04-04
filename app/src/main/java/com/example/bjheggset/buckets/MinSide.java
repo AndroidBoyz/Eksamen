@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,5 +85,10 @@ public class MinSide extends AppCompatActivity {
         request.executeAsync();
 
 
+    }
+
+    public void ItemActivity(View view){
+        Intent i = new Intent(this, NewItem.class);
+        startActivity(i);
     }
 }
