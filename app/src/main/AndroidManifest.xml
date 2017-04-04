@@ -23,7 +23,8 @@
             android:value="@string/facebook_app_id" />
 
         <activity android:name=".MinSide" />
-        <activity android:name=".NewItem"></activity>
+        <activity android:name=".NewItem" />
+        <activity android:name=".ListBuckets"></activity>
     </application>
 
 </manifest>
