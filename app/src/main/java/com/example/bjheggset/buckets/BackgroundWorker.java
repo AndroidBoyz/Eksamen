@@ -32,130 +32,100 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
     protected String doInBackground(String... params) {
         String type = params[0];
 
+        //Login:
         if(type.equals("login")) {
-            String login_url= "http://heggset.it/loginBuckets.php";
+            String str_url= "http://heggset.it/loginBuckets.php";
             try {
                 String userID = params[1];
                 String first_name = params[2];
                 String last_name = params[3];
-
-
-                URL url = new URL(login_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-
                 String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&"+URLEncoder.encode("first_name","UTF-8")+"="+URLEncoder.encode(first_name,"UTF-8")+"&"+URLEncoder.encode("last_name","UTF-8")+"="+URLEncoder.encode(last_name,"UTF-8");
 
-                //String post_data = "userID="+userID+"&first_name="+first_name+"&last_name="+last_name;
+                return HandleURL(str_url, post_data);
 
-                bufferedWriter.write(post_data);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
-
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-                String result="";
-                String line="";
-                while ((line = bufferedReader.readLine())!=null) {
-                    result+=line;
-                }
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-
-                return result;
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
+        //New item:
         if(type.equals("newItem")) {
-            String newItem_url = "http://heggset.it/insert.php";
+            String str_url = "http://heggset.it/insert.php";
             try {
                 String itemValue = params[1];
-
-                URL url = new URL(newItem_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-
                 String post_data = "itemName="+URLEncoder.encode(itemValue,"UTF-8")+"&action=item";
 
-                bufferedWriter.write(post_data);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
+                return HandleURL(str_url, post_data);
 
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-                String result="";
-                String line="";
-                while ((line = bufferedReader.readLine())!=null) {
-                    result+=line;
-                }
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-
-                return result;
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        //Get lists:
         if(type.equals("getLists")) {
-            String lists_url= "http://heggset.it/";
+            String str_url= "http://heggset.it/";
             try {
                 String userID = params[1];
+                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&action=getLists";
 
-                URL url = new URL(lists_url);
-                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                return HandleURL(str_url, post_data);
 
-                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8");
-
-                bufferedWriter.write(post_data);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
-
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-                String result="";
-                String line="";
-                while ((line = bufferedReader.readLine())!=null) {
-                    result+=line;
-                }
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-
-                return result;
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
+        //Get items:
+        if(type.equals("getItems")) {
+            String str_url= "http://heggset.it/";
+            try {
+                String userID = params[1];
+                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&action=getItems";
+
+                return HandleURL(str_url, post_data);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    private String HandleURL(String str_url, String post_data) {
+        try {
+            URL url = new URL(str_url);
+            HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+
+            bufferedWriter.write(post_data);
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            outputStream.close();
+
+            InputStream inputStream = httpURLConnection.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+            String result="";
+            String line="";
+            while ((line = bufferedReader.readLine())!=null) {
+                result+=line;
+            }
+            bufferedReader.close();
+            inputStream.close();
+            httpURLConnection.disconnect();
+
+            return result;
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
