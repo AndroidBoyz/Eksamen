@@ -57,6 +57,7 @@ public class MinSide extends AppCompatActivity {
                             JSONObject object,
                             GraphResponse response) {
 
+                        //Henter facebookbilde via API med userID og streamer til fresco biblioteket
                         Profile profile = Profile.getCurrentProfile();
                         BackgroundWorker backgroundWorker = new BackgroundWorker($me);
                         TextView txtnavn = (TextView)findViewById(R.id.Navn);
