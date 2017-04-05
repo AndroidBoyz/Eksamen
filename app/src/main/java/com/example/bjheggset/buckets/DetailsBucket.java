@@ -13,7 +13,10 @@ AlertDialog alertDialog;
         setContentView(R.layout.activity_details_bucket);
 
         Bucketlist bucketlist = (Bucketlist) getIntent().getExtras().getSerializable("selected");
+        int editId = bucketlist.getId();
 
+        //TODO: Bruk objektets ID til å finne tilhørende items
+        int i = 0;
 
     }
 }

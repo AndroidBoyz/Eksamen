@@ -21,10 +21,14 @@ public class Bucketlist implements Serializable{
         this.FK_fID = FK_fID;
     }
 
-//    @Override
-//    public String toString(){
-//        return this.bucketName;
-//    }
+    public int getId(){
+        return this.id;
+    }
+
+    @Override
+    public String toString(){
+        return this.bucketName;
+    }
 
     public List<Items> getItems(){
         //TODO: Kjør sql spørring på relasjonsdatabasen etter denne Bucketlist sin ID.
