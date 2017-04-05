@@ -27,7 +27,8 @@
         <activity android:name=".MinSide"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".NewItem" />
-        <activity android:name=".ListBuckets"></activity>
+        <activity android:name=".ListBuckets" />
+        <activity android:name=".DetailsBucket"></activity>
     </application>
 
 </manifest>
