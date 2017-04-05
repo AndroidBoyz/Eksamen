@@ -16,6 +16,8 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.login.widget.ProfilePictureView;
 
 import org.json.JSONException;
@@ -28,21 +30,21 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MinSide extends AppCompatActivity {
-
     Intent i;
     Context $me = this;
+
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fresco.initialize(this);
         setContentView(R.layout.activity_min_side);
 
 
-
         String token = getIntent().getExtras().getString("result");
-        String userID = getIntent().getExtras().getString("userID");
+        final String userID = getIntent().getExtras().getString("userID");
 
 
 
@@ -58,8 +60,11 @@ public class MinSide extends AppCompatActivity {
                         Profile profile = Profile.getCurrentProfile();
                         BackgroundWorker backgroundWorker = new BackgroundWorker($me);
                         TextView txtnavn = (TextView)findViewById(R.id.Navn);
-                        ((ProfilePictureView)findViewById(R.id.profilePicture)).setProfileId(
-                                profile.getId());
+                        Uri imageUri = Uri.parse("http://graph.facebook.com/" + profile.getId() + "/picture?type=large");
+                        SimpleDraweeView draweeView = (SimpleDraweeView) findViewById(R.id.sdvImage);
+                        draweeView.setImageURI(imageUri);
+
+
 
                      try {
                          String first_name = object.getString("first_name");

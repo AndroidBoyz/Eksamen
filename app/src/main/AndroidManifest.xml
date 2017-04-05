@@ -10,7 +10,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login">
+        <activity android:name=".Login"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +24,8 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".MinSide" />
+        <activity android:name=".MinSide"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".NewItem" />
         <activity android:name=".ListBuckets"></activity>
     </application>

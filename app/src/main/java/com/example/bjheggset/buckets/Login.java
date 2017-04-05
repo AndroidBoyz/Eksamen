@@ -19,8 +19,6 @@ public class Login extends AppCompatActivity {
     CallbackManager callbackManager;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +44,6 @@ public class Login extends AppCompatActivity {
             @Override
             public void onCancel() {
 
-                text.setText("Login cancelled");
             }
 
             @Override
