@@ -1,7 +1,9 @@
 package com.example.bjheggset.buckets;
 
 import android.app.AlertDialog;
+import android.app.usage.NetworkStats;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
@@ -15,6 +17,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.json.*;
 
 /**
  * Created by bjheggset on 28.03.2017.
@@ -41,8 +47,9 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 String last_name = params[3];
                 String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&"+URLEncoder.encode("first_name","UTF-8")+"="+URLEncoder.encode(first_name,"UTF-8")+"&"+URLEncoder.encode("last_name","UTF-8")+"="+URLEncoder.encode(last_name,"UTF-8");
 
-                return HandleURL(str_url, post_data);
-
+                String data = HandleURL(str_url, post_data);
+                data += "!!!login";
+                return data;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -55,8 +62,9 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 String itemValue = params[1];
                 String post_data = "itemName="+URLEncoder.encode(itemValue,"UTF-8")+"&action=item";
 
-                return HandleURL(str_url, post_data);
-
+                String data = HandleURL(str_url, post_data);
+                data += "!!!newitem";
+                return data;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -64,13 +72,16 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
 
         //Get lists:
         if(type.equals("getLists")) {
-            String str_url= "http://heggset.it/";
+            String str_url= "http://heggset.it/show_list.php";
             try {
                 String userID = params[1];
-                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&action=getLists";
+                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&action=showbuckets";
 
-                return HandleURL(str_url, post_data);
+                String data =  HandleURL(str_url, post_data);
 
+                data += "!!!showbuckets";
+
+                return data;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -78,13 +89,14 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
 
         //Get items:
         if(type.equals("getItems")) {
-            String str_url= "http://heggset.it/";
+            String str_url= "http://heggset.it/show_list.php";
             try {
-                String userID = params[1];
-                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&action=getItems";
+                String bucketID = params[1];
+                String post_data = "bucketID="+URLEncoder.encode(bucketID,"UTF-8")+"&action=showitems";
 
-                return HandleURL(str_url, post_data);
-
+                String data = HandleURL(str_url, post_data);
+                data += "!!!showitems";
+                return data;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -110,16 +122,16 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
 
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-            String result="";
+            StringBuilder result = new StringBuilder();
             String line="";
             while ((line = bufferedReader.readLine())!=null) {
-                result+=line;
+                result.append(line);
             }
             bufferedReader.close();
             inputStream.close();
             httpURLConnection.disconnect();
 
-            return result;
+            return result.toString();
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -131,8 +143,33 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
 
     @Override
     protected void onPostExecute(String result) {
-       alertDialog.setMessage(result);
-        alertDialog.show();
+        String[] resultHandler = result.split("!!!");
+        String data = resultHandler[0];
+        String action = resultHandler[1];
+
+        switch (action){
+            case "showbuckets":
+                Intent i = new Intent(context, ListBuckets.class);
+                i.putExtra("data", data);
+                context.startActivity(i);
+                break;
+            case "login":
+                alertDialog.setMessage(data);
+                alertDialog.show();
+                break;
+            case "showitems":
+                break;
+            case "newitem":
+                alertDialog.setMessage(data);
+                alertDialog.show();
+                break;
+            default:
+                break;
+
+        }
+
+
+
     }
 
     @Override

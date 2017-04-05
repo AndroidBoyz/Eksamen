@@ -91,4 +91,10 @@ public class MinSide extends AppCompatActivity {
         Intent i = new Intent(this, NewItem.class);
         startActivity(i);
     }
+
+    public void getBuckets(View view){
+        String userID = Profile.getCurrentProfile().getId();
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute("getLists", userID);
+    }
 }
