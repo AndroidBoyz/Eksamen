@@ -13,6 +13,8 @@
     tools:context="com.example.bjheggset.buckets.MinSide">
 
     <com.facebook.drawee.view.SimpleDraweeView
+
+        android:onClick="camera"
         android:id="@+id/sdvImage"
         android:layout_width="150dp"
         android:layout_height="150dp"
