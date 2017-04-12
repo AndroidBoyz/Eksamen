@@ -1,8 +1,11 @@
 package com.example.bjheggset.buckets;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -10,6 +13,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContentResolverCompat;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,10 +41,12 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static android.R.attr.data;
 import static android.media.MediaRecorder.VideoSource.CAMERA;
 
 public class MinSide extends AppCompatActivity {
-    Intent i;
+    private static final int CAMERA_PROFILE = 1888; //Skal brukes om vi skal skifte profilbilde med camera
+    Intent i; // ^
     Context $me = this;
 
 
@@ -48,10 +55,6 @@ public class MinSide extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
         setContentView(R.layout.activity_min_side);
-
-
-        String token = getIntent().getExtras().getString("result");
-        final String userID = getIntent().getExtras().getString("userID");
 
 
 //Spør etter tilganger som kamera/kontakter osv der det kreves
@@ -71,11 +74,15 @@ public class MinSide extends AppCompatActivity {
                             JSONObject object,
                             GraphResponse response) {
 
+
                         //Henter facebookbilde via API med userID og streamer til fresco biblioteket
                         Profile profile = Profile.getCurrentProfile();
                         BackgroundWorker backgroundWorker = new BackgroundWorker($me);
                         TextView txtnavn = (TextView) findViewById(R.id.Navn);
-                        Uri imageUri = Uri.parse("http://graph.facebook.com/" + profile.getId() + "/picture?type=large");
+
+                        String profilbilde = "http://graph.facebook.com/" + profile.getId() + "/picture?type=large";
+
+                        Uri imageUri = Uri.parse(profilbilde);
                         SimpleDraweeView draweeView = (SimpleDraweeView) findViewById(R.id.sdvImage);
                         draweeView.setImageURI(imageUri);
 
@@ -115,20 +122,8 @@ public class MinSide extends AppCompatActivity {
         backgroundWorker.execute("getLists", userID);
     }
 
-    //Metode for å spørre om tilgang til kamera. Om kamera ikke finnes på enheten får bruker melding
-    public void camera(View view) {
+    //Metode for å åpne kamera og sjekke om kamera finnes på enheten
 
-        PackageManager pm = this.getPackageManager();
-
-
-        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
-            startActivity(i);
-        } else {
-            Toast t = Toast.makeText(this, "No camera found on this device", Toast.LENGTH_SHORT);
-            t.show();
-        }
-    }
 //sjekker hvilke tilganger som er gitt av bruker til app
 
     public static boolean hasPermissions(Context context, String... permissions) {
@@ -142,5 +137,4 @@ public class MinSide extends AppCompatActivity {
         return true;
     }
 
-    }
-
+}

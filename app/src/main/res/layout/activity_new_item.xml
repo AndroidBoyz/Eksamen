@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_new_item"
     android:layout_width="match_parent"
@@ -39,5 +40,26 @@
         android:onClick="SubmitItem"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/camera"
+        android:layout_marginTop="86dp"
+        android:id="@+id/itemPicture"
+        android:layout_below="@+id/txtItem"
+        android:layout_centerHorizontal="true"
+        android:onClick="camera"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/com_facebook_auth_dialog_cancel_background"
+        android:id="@+id/imageView2"
+        android:scaleType="centerCrop"
+        android:layout_above="@+id/btnSubmit"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="17dp"
+        android:layout_alignTop="@+id/itemPicture" />
 
 </RelativeLayout>
