@@ -3,4 +3,5 @@
     <string name="txtLogin">Buckets lets you create and share goals with others around you
     </string>
     <string name="facebook_app_id">1808143812784653</string>
+    <string name="title_activity_edit_bucket">EditBucket</string>
 </resources>

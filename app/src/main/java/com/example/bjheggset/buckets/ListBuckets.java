@@ -55,4 +55,15 @@ public class ListBuckets extends AppCompatActivity {
 
         });
     }
+    protected void editBucket(View view){
+        Intent i = new Intent(this, EditBucket.class);
+        i.putExtra("bucketID", -1);
+        startActivity(i);
+    }
+
+    protected void editBucket(View view, String bucketID) {
+        Intent i = new Intent(this, EditBucket.class);
+        //TODO: intent.extra = valgt bucketlist sin id
+        startActivity(i);
+    }
 }
