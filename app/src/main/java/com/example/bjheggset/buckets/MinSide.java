@@ -54,6 +54,15 @@ public class MinSide extends AppCompatActivity {
         final String userID = getIntent().getExtras().getString("userID");
 
 
+//Spør etter tilganger som kamera/kontakter osv der det kreves
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS, Manifest.permission.CAMERA};
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
+
+
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -111,12 +120,7 @@ public class MinSide extends AppCompatActivity {
 
         PackageManager pm = this.getPackageManager();
 
-        int PERMISSION_ALL = 1;
-        String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS, Manifest.permission.CAMERA};
 
-        if (!hasPermissions(this, PERMISSIONS)) {
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-        }
             if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
                 Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
                 startActivity(i);
@@ -126,7 +130,7 @@ public class MinSide extends AppCompatActivity {
 
     }
 
-//metode for å spørre etter tilganger(Kamera,minnekort,kontakter etc) ved runtime
+//sjekker hvilke tilganger som er gitt av bruker til app
 
     public static boolean hasPermissions(Context context, String... permissions) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
