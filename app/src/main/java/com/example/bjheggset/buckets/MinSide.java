@@ -53,7 +53,7 @@ public class MinSide extends AppCompatActivity {
         final String userID = getIntent().getExtras().getString("userID");
 
 
-        //spør om tilganger til det som kreves for å kjøre forskjellige funksjoner
+        //spør om tilganger til det som kreves for å kjøre forskjellige funksjoner.
         int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS, Manifest.permission.CAMERA};
