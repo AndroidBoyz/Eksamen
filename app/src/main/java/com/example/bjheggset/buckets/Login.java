@@ -10,6 +10,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -25,6 +26,12 @@ public class Login extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_fblogin);
         final Intent i =  new Intent(this, MinSide.class);
+
+
+        if (Profile.getCurrentProfile() != null) {
+            startActivity(i);
+            return;
+        }
 
 
         loginButton = (LoginButton)findViewById(R.id.login_button);

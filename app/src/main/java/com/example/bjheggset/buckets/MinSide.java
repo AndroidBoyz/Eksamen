@@ -50,8 +50,8 @@ public class MinSide extends AppCompatActivity {
         setContentView(R.layout.activity_min_side);
 
 
-        String token = getIntent().getExtras().getString("result");
-        final String userID = getIntent().getExtras().getString("userID");
+        //String token = getIntent().getExtras().getString("result");
+        //final String userID = getIntent().getExtras().getString("userID");
 
 
         GraphRequest request = GraphRequest.newMeRequest(
