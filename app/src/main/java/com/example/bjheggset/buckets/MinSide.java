@@ -49,20 +49,9 @@ public class MinSide extends AppCompatActivity {
         Fresco.initialize(this);
         setContentView(R.layout.activity_min_side);
 
+
         String token = getIntent().getExtras().getString("result");
         final String userID = getIntent().getExtras().getString("userID");
-
-
-        //spør om tilganger til det som kreves for å kjøre forskjellige funksjoner.
-        int PERMISSION_ALL = 1;
-        String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS, Manifest.permission.CAMERA};
-
-        if (!hasPermissions(this, PERMISSIONS)) {
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-
-        }
-
 
 
         GraphRequest request = GraphRequest.newMeRequest(
@@ -117,7 +106,28 @@ public class MinSide extends AppCompatActivity {
         backgroundWorker.execute("getLists", userID);
     }
 
-//sjekker tilganger
+    //Metode for å spørre om tilgang til kamera. Om kamera ikke finnes på enheten får bruker melding
+    public void camera(View view) {
+
+        PackageManager pm = this.getPackageManager();
+
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS, Manifest.permission.CAMERA};
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
+            if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+                Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
+                startActivity(i);
+            }
+            Toast t = Toast.makeText(this, "No camera found on this device", Toast.LENGTH_SHORT);
+            t.show();
+
+    }
+
+//metode for å spørre etter tilganger(Kamera,minnekort,kontakter etc) ved runtime
+
     public static boolean hasPermissions(Context context, String... permissions) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {
@@ -128,24 +138,6 @@ public class MinSide extends AppCompatActivity {
         }
         return true;
     }
-
-//sjekker om kamera finnes på enheten, om ikke vis feilmelding
-    public void camera(View view) {
-
-        PackageManager pm = this.getPackageManager();
-
-        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
-            startActivity(i);
-        } else {
-            Toast t = Toast.makeText(this, "No camera found on this device", Toast.LENGTH_SHORT);
-            t.show();
-
-        }
-    }
-
-
-
 
     }
 

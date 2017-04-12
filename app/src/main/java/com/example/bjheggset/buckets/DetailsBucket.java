@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 public class DetailsBucket extends AppCompatActivity {
 AlertDialog alertDialog;
+    int editId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,7 +14,7 @@ AlertDialog alertDialog;
         setContentView(R.layout.activity_details_bucket);
 
         Bucketlist bucketlist = (Bucketlist) getIntent().getExtras().getSerializable("selected");
-        int editId = bucketlist.getId();
+        editId = bucketlist.getId();
 
         //TODO: Bruk objektets ID til å finne tilhørende items
         int i = 0;
