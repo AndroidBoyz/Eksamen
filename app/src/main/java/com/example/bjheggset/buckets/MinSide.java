@@ -50,10 +50,6 @@ public class MinSide extends AppCompatActivity {
         setContentView(R.layout.activity_min_side);
 
 
-        String token = getIntent().getExtras().getString("result");
-        final String userID = getIntent().getExtras().getString("userID");
-
-
 //Spør etter tilganger som kamera/kontakter osv der det kreves
         int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS, Manifest.permission.CAMERA};

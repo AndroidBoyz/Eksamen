@@ -20,4 +20,9 @@ public class Items {
     public int getItemID(){
         return this.itemID;
     }
+
+    @Override
+    public String toString(){
+        return items;
+    }
 }
