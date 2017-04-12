@@ -121,15 +121,14 @@ public class MinSide extends AppCompatActivity {
         PackageManager pm = this.getPackageManager();
 
 
-            if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-                Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
-                startActivity(i);
-            }
+        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
+            startActivity(i);
+        } else {
             Toast t = Toast.makeText(this, "No camera found on this device", Toast.LENGTH_SHORT);
             t.show();
-
+        }
     }
-
 //sjekker hvilke tilganger som er gitt av bruker til app
 
     public static boolean hasPermissions(Context context, String... permissions) {
