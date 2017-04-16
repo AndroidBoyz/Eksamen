@@ -38,120 +38,125 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
     @Override
     protected String doInBackground(String... params) {
         String type = params[0];
+        String str_url="";
 
-        //Login:
-        if(type.equals("login")) {
-            String str_url= "http://heggset.it/loginBuckets.php";
-            try {
-                String userID = params[1];
-                String first_name = params[2];
-                String last_name = params[3];
-                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&"+URLEncoder.encode("first_name","UTF-8")+"="+URLEncoder.encode(first_name,"UTF-8")+"&"+URLEncoder.encode("last_name","UTF-8")+"="+URLEncoder.encode(last_name,"UTF-8");
+        switch(type) {
+            //Login:
+            case "login":
+                str_url = "http://heggset.it/loginBuckets.php";
+                try {
+                    String userID = params[1];
+                    String first_name = params[2];
+                    String last_name = params[3];
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") + "&" + URLEncoder.encode("first_name", "UTF-8") + "=" + URLEncoder.encode(first_name, "UTF-8") + "&" + URLEncoder.encode("last_name", "UTF-8") + "=" + URLEncoder.encode(last_name, "UTF-8");
 
-                String data = HandleURL(str_url, post_data);
-                data += "!!!login";
-                return data;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!login";
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
 
-        //New item:
-        if(type.equals("newItem")) {
-            String str_url = "http://heggset.it/insert.php";
-            try {
-                String itemValue = params[1];
-                String post_data = "itemName="+URLEncoder.encode(itemValue,"UTF-8")+"&action=item";
+            //New item:
+            case "newItem":
+                str_url = "http://heggset.it/insert.php";
+                try {
+                    String itemValue = params[1];
+                    String post_data = "itemName=" + URLEncoder.encode(itemValue, "UTF-8") + "&action=item";
 
-                String data = HandleURL(str_url, post_data);
-                data += "!!!newitem";
-                return data;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!newitem";
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
 
-        //Get lists:
-        if(type.equals("getLists")) {
-            String str_url= "http://heggset.it/show_list.php";
-            try {
-                String userID = params[1];
-                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&action=showbuckets";
+            //Get lists:
+            case "getLists":
+                str_url = "http://heggset.it/show_list.php";
+                try {
+                    String userID = params[1];
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") + "&action=showbuckets";
 
-                String data =  HandleURL(str_url, post_data);
+                    String data = HandleURL(str_url, post_data);
 
-                data += "!!!showbuckets";
+                    data += "!!!showbuckets";
 
-                return data;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
 
-        //Get items:
-        if(type.equals("getItems")) {
-            String str_url= "http://heggset.it/show_list.php";
-            try {
-                String bucketID = params[1];
-                String post_data = "bucketID="+URLEncoder.encode(bucketID,"UTF-8")+"&action=showitems";
+            //Get items:
+            case "getItems":
+                str_url = "http://heggset.it/show_list.php";
+                try {
+                    String bucketID = params[1];
+                    String post_data = "bucketID=" + URLEncoder.encode(bucketID, "UTF-8") + "&action=showitems";
 
-                String data = HandleURL(str_url, post_data);
-                data += "!!!showitems";
-                return data;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!showitems";
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
 
-        if(type.equals("getUnacquired")) {
-            String str_url="http://heggset.it/getItems.php";
-            try{
-                String userID = params[1];
-                String bucketID = params[2];
-                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&bucketID="+URLEncoder.encode(bucketID,"UTF-8")+"&action=getUnacquired";
+            case "getUnacquired":
+                str_url = "http://heggset.it/getItems.php";
+                try {
+                    String userID = params[1];
+                    String bucketID = params[2];
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") + "&bucketID=" + URLEncoder.encode(bucketID, "UTF-8") + "&action=getUnacquired";
 
-                String data = HandleURL(str_url, post_data);
-                data += "!!!getUnacquired";
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!getUnacquired";
 
-                return data;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
 
-        if(type.equals("getAcquired")) {
-            String str_url="http://heggset.it/getItems.php";
-            try{
-                String userID = params[1];
-                String bucketID = params[2];
-                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&bucketID="+URLEncoder.encode(bucketID,"UTF-8")+"&action=getAcquired";
+            case "getAcquired":
+                str_url = "http://heggset.it/getItems.php";
+                try {
+                    String userID = params[1];
+                    String bucketID = params[2];
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") + "&bucketID=" + URLEncoder.encode(bucketID, "UTF-8") + "&action=getAcquired";
 
-                String data = HandleURL(str_url, post_data);
-                data += "!!!getAcquired";
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!getAcquired";
 
-                return data;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
 
-        if(type.equals("saveList")) {
-            String str_url="http://heggset.it/getItems.php";
-            try{
-                String userID = params[1];
-                String bucketID = params[2];
-                String items = params[3];
-                String bucketname = params[4];
-                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&bucketID="+URLEncoder.encode(bucketID,"UTF-8")+"&items="+URLEncoder.encode(items,"UTF-8")+"&bucketname="+URLEncoder.encode(bucketname,"UTF-8")+"&action=saveList";
+            case "saveList":
+                str_url = "http://heggset.it/getItems.php";
+                try {
+                    String userID = params[1];
+                    String bucketID = params[2];
+                    String items = params[3];
+                    String bucketname = params[4];
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") + "&bucketID=" + URLEncoder.encode(bucketID, "UTF-8") + "&items=" + URLEncoder.encode(items, "UTF-8") + "&bucketname=" + URLEncoder.encode(bucketname, "UTF-8") + "&action=saveList";
 
-                String data = HandleURL(str_url, post_data);
-                data += "!!!saveList";
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!saveList";
 
-                return data;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
+            default:
+                break;
+        } // End of switch
 
         return null;
     }
