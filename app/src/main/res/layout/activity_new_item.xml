@@ -44,22 +44,28 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:srcCompat="@drawable/insertimage"
+        android:id="@+id/itemInsertImage"
+        android:layout_above="@+id/btnSubmit"
+        android:layout_toEndOf="@+id/txtItem" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:srcCompat="@drawable/camera"
-        android:layout_marginTop="86dp"
-        android:id="@+id/itemPicture"
-        android:layout_below="@+id/txtItem"
-        android:layout_centerHorizontal="true"
-        android:onClick="camera"/>
+        android:id="@+id/itemPhoto"
+        android:layout_above="@+id/btnSubmit"
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/com_facebook_auth_dialog_cancel_background"
-        android:id="@+id/imageView2"
+        android:id="@+id/ivImage"
         android:scaleType="centerCrop"
-        android:layout_above="@+id/btnSubmit"
+        android:layout_above="@+id/itemInsertImage"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="17dp"
-        android:layout_alignTop="@+id/itemPicture" />
+        android:layout_below="@+id/txtItem"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
