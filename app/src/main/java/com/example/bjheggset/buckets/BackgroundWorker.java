@@ -135,6 +135,24 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
             }
         }
 
+        if(type.equals("saveList")) {
+            String str_url="http://heggset.it/getItems.php";
+            try{
+                String userID = params[1];
+                String bucketID = params[2];
+                String items = params[3];
+                String bucketname = params[4];
+                String post_data = "userID="+URLEncoder.encode(userID,"UTF-8")+"&bucketID="+URLEncoder.encode(bucketID,"UTF-8")+"&items="+URLEncoder.encode(items,"UTF-8")+"&bucketname="+URLEncoder.encode(bucketname,"UTF-8")+"&action=saveList";
+
+                String data = HandleURL(str_url, post_data);
+                data += "!!!saveList";
+
+                return data;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         return null;
     }
 
@@ -205,6 +223,10 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 Intent i3 = new Intent("Items");
                 i3.putExtra("data", data);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(i3);
+                break;
+            case "saveList":
+                alertDialog.setMessage(data);
+                alertDialog.show();
                 break;
             default:
                 break;

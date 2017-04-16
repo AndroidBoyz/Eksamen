@@ -1,5 +1,8 @@
 package com.example.bjheggset.buckets;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by KimRo on 04/04/2017.
  */
@@ -24,5 +27,16 @@ public class Items {
     @Override
     public String toString(){
         return items;
+    }
+
+    public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("itemID", itemID);
+            obj.put("items", items);
+        } catch (JSONException e) {
+
+        }
+        return obj;
     }
 }

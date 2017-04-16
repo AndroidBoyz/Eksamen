@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.facebook.Profile;
@@ -24,8 +25,8 @@ import java.util.List;
 
 public class EditBucket extends AppCompatActivity {
     BackgroundWorker backgroundWorker;
-    List<Items> liste = new ArrayList<>();
-    List<Items> listeValgt = new ArrayList<>();
+    public static List<Items> listeAlle = new ArrayList<>();
+    public static List<Items> listeValgt = new ArrayList<>();
     String userID;
     int bucketID;
 
@@ -46,9 +47,9 @@ public class EditBucket extends AppCompatActivity {
         userID = profile.getId();
         backgroundWorker = new BackgroundWorker(this);
 
-
-
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("Items"));
+
+
 
     }
 
@@ -60,13 +61,14 @@ public class EditBucket extends AppCompatActivity {
                 int id = jsonObject.getInt("itemID");
                 String task = jsonObject.getString("items");
                 Items item = new Items(id, task);
-                liste.add(item);
+                listeAlle.add(item);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         final ListView listview = (ListView)findViewById(R.id.lstItems);
-        final ArrayAdapter adapter = new ArrayAdapter<Items>(this, android.R.layout.simple_list_item_1, liste);
+        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listeAlle);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,11 +78,23 @@ public class EditBucket extends AppCompatActivity {
 
                 Items item = (Items) listview.getItemAtPosition(position);
                 listeValgt.add(item);
-                liste.remove(item);
+                listeAlle.remove(item);
                 adapter.notifyDataSetChanged();
             }
 
         });
+
+    }
+
+    protected void Save(View view) {
+        EditText editText = (EditText) findViewById(R.id.txtName);
+        String bucketname = editText.getText().toString();
+
+        JSONArray jsonArray = new JSONArray();
+        for(int i=0; i < listeValgt.size(); i++){
+            jsonArray.put(listeValgt.get(i).getJSON());
+        }
+        new BackgroundWorker(this).execute("saveList",userID, String.valueOf(bucketID), jsonArray.toString(), bucketname);
     }
 
     protected void getUnacquired(View view){
