@@ -45,8 +45,6 @@ import static android.R.attr.data;
 import static android.media.MediaRecorder.VideoSource.CAMERA;
 
 public class MinSide extends AppCompatActivity {
-    private static final int CAMERA_PROFILE = 1888; //Skal brukes om vi skal skifte profilbilde med camera
-    Intent i; // ^
     Context $me = this;
 
 
@@ -114,6 +112,10 @@ public class MinSide extends AppCompatActivity {
     public void ItemActivity(View view) {
         Intent i = new Intent(this, NewItem.class);
         startActivity(i);
+    }
+
+    protected void getAntBuckets(Profile profile){
+        new BackgroundWorker(this).execute("AntallBuckets", profile.getId());
     }
 
     public void getBuckets(View view) {
