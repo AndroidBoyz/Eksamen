@@ -54,6 +54,7 @@ public class EditBucket extends AppCompatActivity {
     }
 
     public void setList(String data) {
+        listeAlle.clear();
         try {
             JSONArray jsonArray = new JSONArray(data);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -67,22 +68,7 @@ public class EditBucket extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        final ListView listview = (ListView)findViewById(R.id.lstItems);
-        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listeAlle);
-        listview.setAdapter(adapter);
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-
-                Items item = (Items) listview.getItemAtPosition(position);
-                listeValgt.add(item);
-                listeAlle.remove(item);
-                adapter.notifyDataSetChanged();
-            }
-
-        });
 
     }
 
@@ -95,16 +81,46 @@ public class EditBucket extends AppCompatActivity {
             jsonArray.put(listeValgt.get(i).getJSON());
         }
         new BackgroundWorker(this).execute("saveList",userID, String.valueOf(bucketID), jsonArray.toString(), bucketname);
+        backgroundWorker.execute("getLists", userID);
     }
 
     protected void getUnacquired(View view){
         new BackgroundWorker(this).execute("getUnacquired", userID, String.valueOf(bucketID));
+        final ListView listview = (ListView)findViewById(R.id.lstItems);
+        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listeAlle);
+        listview.setAdapter(adapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+                Items item = (Items) listview.getItemAtPosition(position);
+
+                listeValgt.add(item);
+                listeAlle.remove(item);
+
+                adapter.notifyDataSetChanged();
+            }
+
+        });
     }
 
     protected void getAcquired(View view){
-        //backgroundWorker.execute("getAcquired", userID, String.valueOf(bucketID));
-        ArrayAdapter adapter = new ArrayAdapter<Items>(this, android.R.layout.simple_list_item_1, listeValgt);
+        final ArrayAdapter adapter = new ArrayAdapter<Items>(this, android.R.layout.simple_list_item_1, listeValgt);
         final ListView listview = (ListView) findViewById(R.id.lstItems);
         listview.setAdapter(adapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+                Items item = (Items) listview.getItemAtPosition(position);
+                listeValgt.remove(item);
+                adapter.notifyDataSetChanged();
+            }
+
+        });
     }
 }
