@@ -155,34 +155,20 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 }
                 break;
 
-            case "antallbuckets":
+            case "AntallBuckets":
                 str_url = "http://heggset.it/stats.php";
                 try {
                     String userID = params[1];
-                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8")+"&action=antallbuckets";
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") + "&bucketID=" + URLEncoder.encode(userID, "UTF-8")+"&action=AntallBuckets";
 
                     String data = HandleURL(str_url, post_data);
-                    data += "!!!antallbuckets";
+                    data += "!!!saveList";
 
                     return data;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             break;
-            case "antallitems":
-                str_url = "http://heggset.it/stats.php";
-                try {
-                    String userID = params[1];
-                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8")+"&action=antallitems";
-
-                    String data = HandleURL(str_url, post_data);
-                    data += "!!!antallitems";
-
-                    return data;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
             default:
                 break;
         } // End of switch
@@ -263,21 +249,12 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 alertDialog.setMessage(data);
                 alertDialog.show();
                 break;
-            case "antallbuckets":
-            Intent i4 = new Intent("antbuckets");
-            i4.putExtra("antbuckets", data);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(i4);
-                break;
-            case "antallitems":
-                Intent i5 = new Intent("antitems");
-                i5.putExtra("antitems", data);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(i5);
-            break;
-
             default:
                 break;
 
         }
+
+
 
     }
 
