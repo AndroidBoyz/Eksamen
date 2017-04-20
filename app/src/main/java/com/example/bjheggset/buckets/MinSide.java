@@ -52,6 +52,12 @@ public class MinSide extends AppCompatActivity {
         }
     };
 
+    @Override
+            public void onResume() {
+        super.onResume();
+        updateStats();
+    }
+
 
 
     Context $me = this;

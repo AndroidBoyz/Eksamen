@@ -37,7 +37,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".NewItem"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".ListBuckets"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -47,7 +47,7 @@
         <activity
             android:name=".EditBucket"
             android:label="@string/title_activity_edit_bucket"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>

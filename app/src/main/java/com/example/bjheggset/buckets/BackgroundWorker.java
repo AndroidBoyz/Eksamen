@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -155,20 +156,66 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 }
                 break;
 
-            case "AntallBuckets":
+            case "antallbuckets":
                 str_url = "http://heggset.it/stats.php";
                 try {
                     String userID = params[1];
-                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") + "&bucketID=" + URLEncoder.encode(userID, "UTF-8")+"&action=AntallBuckets";
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8")+"&action=antallbuckets";
 
                     String data = HandleURL(str_url, post_data);
-                    data += "!!!saveList";
+                    data += "!!!antallbuckets";
 
                     return data;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             break;
+
+            case "antallitems":
+            str_url = "http://heggset.it/stats.php";
+            try {
+                String userID = params[1];
+                String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8")+"&action=antallitems";
+
+                String data = HandleURL(str_url, post_data);
+                data += "!!!antallitems";
+
+                return data;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            case "getAccomplished":
+                str_url = "http://heggset.it/getItems.php";
+                try{
+                    String userID = params[1];
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") +"&action=getAccomplished";
+
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!getAccomplished";
+
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
+
+            case "setAccomplished":
+                str_url = "http://heggset.it/getItems.php";
+                try{
+                    String userID = params[1];
+                    String itemID = params[2];
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") +"&itemID=" + URLEncoder.encode(itemID, "UTF-8") +"&action=setAccomplished";
+
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!setAccomplished";
+
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
+
             default:
                 break;
         } // End of switch
@@ -249,6 +296,25 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 alertDialog.setMessage(data);
                 alertDialog.show();
                 break;
+            case "antallbuckets":
+            Intent i4 = new Intent("antbuckets");
+            i4.putExtra("antbuckets", data);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(i4);
+                break;
+            case "antallitems":
+                Intent i5 = new Intent("antitems");
+                i5.putExtra("antitems", data);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(i5);
+            break;
+            case "getAccomplished":
+                Intent i6 = new Intent("Accomplished");
+                i6.putExtra("data", data);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(i6);
+                break;
+            case "setAccomplished":
+                Toast toast = Toast.makeText(context, data, Toast.LENGTH_SHORT);
+                toast.show();
+
             default:
                 break;
 
