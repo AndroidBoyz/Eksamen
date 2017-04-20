@@ -154,6 +154,21 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                break;
+
+            case "AntallBuckets":
+                str_url = "http://heggset.it/stats.php";
+                try {
+                    String userID = params[1];
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8") + "&bucketID=" + URLEncoder.encode(userID, "UTF-8")+"&action=AntallBuckets";
+
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!saveList";
+
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             break;
 
             case "getAccomplished":
@@ -229,6 +244,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
         }
         return null;
     }
+
 
     @Override
     protected void onPostExecute(String result) {
