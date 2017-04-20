@@ -28,7 +28,7 @@
         android:text="Navn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Navn"
+        android:id="@+id/txtNavn"
         android:layout_marginTop="34dp"
         android:textSize="24sp"
         android:textAlignment="viewStart"
@@ -57,5 +57,14 @@
         android:layout_alignTop="@+id/imageButton"
         android:layout_toEndOf="@+id/imageButton"
         android:layout_marginStart="24dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtNavn"
+        android:layout_marginTop="129dp"
+        android:id="@+id/txtStats"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp" />
 
 </RelativeLayout>
