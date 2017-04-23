@@ -5,14 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.facebook.Profile;
 
@@ -29,12 +30,21 @@ public class EditBucket extends AppCompatActivity {
     public static List<Items> listeValgt = new ArrayList<>();
     String userID;
     int bucketID;
+    AlertDialog alertDialog;
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver acqReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String data = intent.getStringExtra("data");
-            setList(data);
+            setAcquiredlist(data);
+        }
+    };
+
+    private BroadcastReceiver unacqRecqiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String data = intent.getStringExtra("data");
+            setUnacquiredlist(data);
         }
     };
 
@@ -47,13 +57,53 @@ public class EditBucket extends AppCompatActivity {
         userID = profile.getId();
         backgroundWorker = new BackgroundWorker(this);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("Items"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(acqReceiver, new IntentFilter("Acquired"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(unacqRecqiver, new IntentFilter("Unacquired"));
 
-
+        Bucketlist bucketlist = (Bucketlist) getIntent().getExtras().getSerializable("selected");
+        if (bucketlist != null) {
+            prepEdit(bucketlist);
+        } else {
+            listeValgt.clear();
+            getUnacquired(null);
+        }
 
     }
 
-    public void setList(String data) {
+    protected void fillList(List<Items> inFocus) {
+        final ListView listview = (ListView)findViewById(R.id.lstItems);
+        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, inFocus);
+        listview.setAdapter(adapter);
+
+        if (inFocus == listeAlle) {
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                    Items item = (Items) listview.getItemAtPosition(position);
+
+                    listeValgt.add(item);
+                    listeAlle.remove(item);
+
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        } else {
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+                    Items item = (Items) listview.getItemAtPosition(position);
+                    listeValgt.remove(item);
+
+                    adapter.notifyDataSetChanged();
+                }
+
+            });
+        }
+    }
+
+    public void setUnacquiredlist(String data) {
         listeAlle.clear();
         try {
             JSONArray jsonArray = new JSONArray(data);
@@ -62,17 +112,40 @@ public class EditBucket extends AppCompatActivity {
                 int id = jsonObject.getInt("itemID");
                 String task = jsonObject.getString("items");
                 Items item = new Items(id, task);
-                listeAlle.add(item);
+                if(!listeValgt.contains(item)) {
+                    listeAlle.add(item);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        fillList(listeAlle);
+    }
 
-
-
+    public void setAcquiredlist(String data) {
+        listeValgt.clear();
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                int id = jsonObject.getInt("itemID");
+                String task = jsonObject.getString("items");
+                Items item = new Items(id, task);
+                listeValgt.add(item);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void Save(View view) {
+        if(!checkRequirements()){
+            alertDialog = new android.app.AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Buckets");
+            alertDialog.setMessage("You have to give te list a name and add a few items");
+            alertDialog.show();
+            return;
+        }
         EditText editText = (EditText) findViewById(R.id.txtName);
         String bucketname = editText.getText().toString();
 
@@ -86,41 +159,30 @@ public class EditBucket extends AppCompatActivity {
 
     protected void getUnacquired(View view){
         new BackgroundWorker(this).execute("getUnacquired", userID, String.valueOf(bucketID));
-        final ListView listview = (ListView)findViewById(R.id.lstItems);
-        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listeAlle);
-        listview.setAdapter(adapter);
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-
-                Items item = (Items) listview.getItemAtPosition(position);
-
-                listeValgt.add(item);
-                listeAlle.remove(item);
-
-                adapter.notifyDataSetChanged();
-            }
-
-        });
     }
 
     protected void getAcquired(View view){
-        final ArrayAdapter adapter = new ArrayAdapter<Items>(this, android.R.layout.simple_list_item_1, listeValgt);
-        final ListView listview = (ListView) findViewById(R.id.lstItems);
-        listview.setAdapter(adapter);
+        fillList(listeValgt);
+    }
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    protected void prepEdit(Bucketlist bl) {
+        bucketID = bl.getId();
+        new BackgroundWorker(this).execute("getAcquired", userID, String.valueOf(bucketID));
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+        TextView txtName = (TextView) findViewById(R.id.txtName);
+        txtName.setText(bl.toString());
 
-                Items item = (Items) listview.getItemAtPosition(position);
-                listeValgt.remove(item);
-                adapter.notifyDataSetChanged();
-            }
+        getAcquired(null);
 
-        });
+    }
+
+    protected boolean checkRequirements(){
+        TextView txtName = (TextView) findViewById(R.id.txtName);
+
+        if (txtName.getText().toString().equals("")){ return false; }
+
+        if (listeValgt.size() == 0) { return false; }
+
+        return true;
     }
 }

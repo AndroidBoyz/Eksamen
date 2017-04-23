@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -33,6 +35,7 @@ public class NewItem extends AppCompatActivity {
     private final String TAG = this.getClass().getName();
     Context $me = this;
     ImageView ivImage, takePhoto, itemInsertImage;
+    AlertDialog alertDialog;
 
 
 
@@ -73,11 +76,20 @@ public class NewItem extends AppCompatActivity {
     }
 
     public void SubmitItem(View view) {
+        if(!checkRequirements()){
+            alertDialog = new android.app.AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Buckets");
+            alertDialog.setMessage("You have to define a goal to accomplish (item name)");
+            alertDialog.show();
+            return;
+        }
         EditText txtItem = (EditText) findViewById(R.id.txtItem);
         String itemValue = txtItem.getText().toString();
 
         BackgroundWorker backgroundWorker = new BackgroundWorker($me);
         backgroundWorker.execute("newItem", itemValue);
+
+        txtItem.setText("");
 
     }
 
@@ -141,6 +153,14 @@ public class NewItem extends AppCompatActivity {
                 }
             }
         }
+
+    protected boolean checkRequirements(){
+        TextView txtItem = (TextView) findViewById(R.id.txtItem);
+        if(txtItem.getText().toString().equals("")){ return false; }
+
+        return true;
+    }
+
     }
 
 

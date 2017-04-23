@@ -60,7 +60,7 @@ public class DetailsBucket extends AppCompatActivity implements AdapterView.OnIt
         editId = bucketlist.getId();
 
         userID = Profile.getCurrentProfile().getId();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("Items"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("Acquired"));
         LocalBroadcastManager.getInstance(this).registerReceiver(Receiver2, new IntentFilter("Accomplished"));
         new BackgroundWorker(this).execute("getAccomplished", userID);
         new BackgroundWorker(this).execute("getAcquired", userID, String.valueOf(editId));

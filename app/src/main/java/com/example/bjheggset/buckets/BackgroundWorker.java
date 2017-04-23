@@ -283,12 +283,12 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 alertDialog.show();
                 break;
             case "getAcquired":
-                Intent i2 = new Intent("Items");
+                Intent i2 = new Intent("Acquired");
                 i2.putExtra("data", data);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(i2);
                 break;
             case "getUnacquired":
-                Intent i3 = new Intent("Items");
+                Intent i3 = new Intent("Unacquired");
                 i3.putExtra("data", data);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(i3);
                 break;

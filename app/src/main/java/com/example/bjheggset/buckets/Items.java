@@ -39,4 +39,15 @@ public class Items {
         }
         return obj;
     }
+
+    @Override
+    public boolean equals (Object object) {
+        boolean same = false;
+
+        if(object != null && object instanceof Items) {
+            same = this.itemID == ((Items) object).itemID;
+        }
+
+        return same;
+    }
 }
