@@ -1,5 +1,6 @@
 package com.example.bjheggset.buckets;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.Context;
@@ -9,6 +10,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,19 +30,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DetailsBucket extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class DetailsBucket extends Activity {
     String userID;
     int editId;
     Bucketlist valgt;
 
+
     List<Items> listen = new ArrayList<>();
     List<Integer> accomplished = new ArrayList<>();
+
+    private RecyclerView recyclerView;
+    private DetailsBucketCA mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String data = intent.getStringExtra("data");
-            fillList(data);
+              fillList(data);
         }
     };
 
@@ -54,6 +63,15 @@ public class DetailsBucket extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_bucket);
+
+        recyclerView = (RecyclerView) findViewById(R.id.goalRecycler);
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        mAdapter = new DetailsBucketCA(listen);
+        recyclerView.setAdapter(mAdapter);
+
 
         Bucketlist bucketlist = (Bucketlist) getIntent().getExtras().getSerializable("selected");
         valgt = bucketlist;
@@ -113,26 +131,28 @@ public class DetailsBucket extends AppCompatActivity implements AdapterView.OnIt
             e.printStackTrace();
         }
 
-        final ListView listview = (ListView)findViewById(R.id.lstItems);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goalRecycler);
         //final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listen);
-        final DetailsBucketCA adapter = new DetailsBucketCA(this, listen, accomplished);
-        listview.setAdapter(adapter);
+       DetailsBucketCA adapter = new DetailsBucketCA(listen);
+       recyclerView.setAdapter(adapter);
 
-        listview.setOnItemClickListener(this);
+        //listview.setOnItemClickListener(this);
+
         updateInfo();
+        mAdapter.notifyDataSetChanged();
     }
 
     public void onItemClick(AdapterView parent, View v, int position, long id) {
         DetailsBucketCA adapter = (DetailsBucketCA) parent.getAdapter();
-        Items item = adapter.getItem(position);
+       // Items item = adapter.getItemCount(position);
         String userID = Profile.getCurrentProfile().getId();
 
 
-        CheckBox checkBox = (CheckBox) v.findViewById(R.id.chkItems);
-        checkBox.setChecked(true);
-        accomplished.add(item.getItemID());
+        //CheckBox checkBox = (CheckBox) v.findViewById(R.id.chkItems);
+        //checkBox.setChecked(true);
+        //accomplished.add(item.getItemID());
 
-        new BackgroundWorker(this).execute("setAccomplished", userID, String.valueOf(item.getItemID()));
+        //new BackgroundWorker(this).execute("setAccomplished", userID, String.valueOf(item.getItemID()));
 
         updateInfo();
     }
@@ -142,4 +162,6 @@ public class DetailsBucket extends AppCompatActivity implements AdapterView.OnIt
         i.putExtra("selected", valgt);
         startActivity(i);
     }
+
+
 }
