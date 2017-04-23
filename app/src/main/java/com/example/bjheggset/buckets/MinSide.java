@@ -5,13 +5,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.icu.text.DecimalFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -29,6 +32,7 @@ import org.json.JSONObject;
 public class MinSide extends AppCompatActivity {
     String antBuckets;
     String antItems;
+    String antAccomplished;
     TextView txtStats;
 
     public BroadcastReceiver bucketmotakker = new BroadcastReceiver() {
@@ -52,10 +56,20 @@ public class MinSide extends AppCompatActivity {
         }
     };
 
+    public BroadcastReceiver accomplishedmottaker = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String antaccomplished = intent.getStringExtra("antAccomplished");
+            antAccomplished = antaccomplished;
+            updateStats();
+        }
+    };
+
     @Override
             public void onResume() {
         super.onResume();
-        updateStats();
+        getStats();
     }
 
 
@@ -69,12 +83,10 @@ public class MinSide extends AppCompatActivity {
         Fresco.initialize(this);
         setContentView(R.layout.activity_min_side);
         System.out.println(antBuckets);
-        txtStats = (TextView)findViewById(R.id.txtStats);
-
-
 
         LocalBroadcastManager.getInstance(this).registerReceiver(bucketmotakker, new IntentFilter("antbuckets"));
         LocalBroadcastManager.getInstance(this).registerReceiver(itemsmotakker, new IntentFilter("antitems"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(accomplishedmottaker, new IntentFilter("antaccomplished"));
 
 
 
@@ -99,8 +111,7 @@ public class MinSide extends AppCompatActivity {
                             GraphResponse response) {
 
 
-                        getAntBuckets();
-                        getAntItems();
+                        getStats();
 
 
                         //Henter facebookbilde via API med userID og streamer til fresco biblioteket
@@ -157,15 +168,49 @@ public class MinSide extends AppCompatActivity {
         backgroundWorker.execute("antallitems", userID);
     }
 
+    public void getAntAccomplished() {
+        String userID = Profile.getCurrentProfile().getId();
+        BackgroundWorker backgroundWorker = new BackgroundWorker($me);
+        backgroundWorker.execute("antallaccomplished", userID);
+    }
+
     public void getBuckets(View view) {
         String userID = Profile.getCurrentProfile().getId();
         BackgroundWorker backgroundWorker = new BackgroundWorker(this);
         backgroundWorker.execute("getLists", userID);
     }
 
+    public void getStats(){
+        getAntBuckets();
+        getAntItems();
+        getAntAccomplished();
+
+        updateStats();
+    }
+
     public void updateStats(){
-            TextView txtStats = (TextView) findViewById(R.id.txtStats);
-        txtStats.setText("You have  "+ antItems +" Items across " + antBuckets+ " Buckets!");
+
+
+        TextView txtStatsBuckets = (TextView) findViewById(R.id.txtStatsBuckets);
+        TextView txtStatsItems = (TextView) findViewById(R.id.txtStatsItems);
+        TextView txtStatsProgress = (TextView) findViewById(R.id.txtStatsProgress);
+        TextView txtStatsAccomplished = (TextView) findViewById(R.id.txtStatsAccomplished);
+
+
+        txtStatsBuckets.setText("You have  " + antBuckets + " bucketlists!");
+        txtStatsItems.setText("These lists contain " + antItems + " unique items");
+
+        if(!TextUtils.isEmpty(antAccomplished) && !TextUtils.isEmpty(antItems)) {
+            double progAccomplished = Double.parseDouble(antAccomplished);
+            double progItems = Double.parseDouble(antItems);
+            double progress = Math.round((progAccomplished/progItems) * 100);
+            txtStatsProgress.setText("Your progress: " + progress + "%");
+
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progbarStats);
+            progressBar.setProgress((int) progress);
+        }
+        txtStatsAccomplished.setText("You have accomplished " + antAccomplished + " / " + antItems + " goals.");
+
     }
 
 

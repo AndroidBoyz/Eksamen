@@ -63,8 +63,40 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtNavn"
         android:layout_marginTop="129dp"
-        android:id="@+id/txtStats"
+        android:id="@+id/txtStatsBuckets"
         android:layout_alignParentStart="true"
         android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtStatsBuckets"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:id="@+id/txtStatsItems" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtStatsProgress"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:id="@+id/progbarStats"
+        android:layout_below="@+id/txtStatsProgress"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progbarStats"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp"
+        android:id="@+id/txtStatsAccomplished" />
 
 </RelativeLayout>

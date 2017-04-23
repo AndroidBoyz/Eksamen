@@ -185,6 +185,23 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 e.printStackTrace();
             }
 
+                break;
+
+            case "antallaccomplished":
+                str_url = "http://heggset.it/stats.php";
+                try {
+                    String userID = params[1];
+                    String post_data = "userID=" + URLEncoder.encode(userID, "UTF-8")+"&action=antallAccomplished";
+
+                    String data = HandleURL(str_url, post_data);
+                    data += "!!!antallaccomplished";
+
+                    return data;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+
             case "getAccomplished":
                 str_url = "http://heggset.it/getItems.php";
                 try{
@@ -306,6 +323,10 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 i5.putExtra("antitems", data);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(i5);
             break;
+            case "antallaccomplished":
+                Intent i7 = new Intent("antaccomplished");
+                i7.putExtra("antAccomplished", data);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(i7);
             case "getAccomplished":
                 Intent i6 = new Intent("Accomplished");
                 i6.putExtra("data", data);
