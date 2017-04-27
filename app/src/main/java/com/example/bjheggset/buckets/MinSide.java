@@ -204,7 +204,7 @@ public class MinSide extends AppCompatActivity {
             double progAccomplished = Double.parseDouble(antAccomplished);
             double progItems = Double.parseDouble(antItems);
             double progress = Math.round((progAccomplished/progItems) * 100);
-            txtStatsProgress.setText("Your progress: " + progress + "%");
+            txtStatsProgress.setText("You have completed " + progress + "% of your goals!" );
 
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progbarStats);
             progressBar.setProgress((int) progress);

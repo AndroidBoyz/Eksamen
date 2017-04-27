@@ -44,11 +44,11 @@ public class NewItem extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        ivImage = (ImageView) findViewById(R.id.ivImage);
-        takePhoto = (ImageView) findViewById(R.id.itemPhoto);
-        itemInsertImage = (ImageView) findViewById(R.id.itemInsertImage);
+        //ivImage = (ImageView) findViewById(R.id.ivImage);
+        //takePhoto = (ImageView) findViewById(R.id.itemPhoto);
+        //itemInsertImage = (ImageView) findViewById(R.id.itemInsertImage);
 
-
+/*
         takePhoto.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
@@ -72,7 +72,7 @@ public class NewItem extends AppCompatActivity {
 
             }
         });
-
+*/
     }
 
     public void SubmitItem(View view) {
