@@ -19,6 +19,7 @@ import java.util.List;
 public class ListBuckets extends AppCompatActivity {
     List<Bucketlist> liste = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
