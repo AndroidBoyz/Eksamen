@@ -48,6 +48,13 @@
             android:name=".EditBucket"
             android:label="@string/title_activity_edit_bucket"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1808143812784653"
+            android:exported="true" />
+
+        <activity android:name=".ShareActivity"></activity>
     </application>
 
 </manifest>

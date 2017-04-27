@@ -102,4 +102,10 @@
         android:layout_above="@+id/imageButton"
         android:layout_alignParentStart="true" />
 
+    <com.facebook.share.widget.ShareButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fb_share_button"
+        />
+
 </RelativeLayout>

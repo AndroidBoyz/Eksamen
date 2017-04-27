@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.icu.text.DecimalFormat;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +24,9 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
+import com.facebook.share.widget.ShareDialog;
 
 import android.content.pm.PackageManager;
 
@@ -34,6 +38,8 @@ public class MinSide extends AppCompatActivity {
     String antItems;
     String antAccomplished;
     TextView txtStats;
+    private ShareButton shareButton;
+    private ShareDialog shareDialog;
 
     public BroadcastReceiver bucketmotakker = new BroadcastReceiver() {
 
@@ -70,6 +76,7 @@ public class MinSide extends AppCompatActivity {
             public void onResume() {
         super.onResume();
         getStats();
+        prepShare();
     }
 
 
@@ -83,6 +90,9 @@ public class MinSide extends AppCompatActivity {
         Fresco.initialize(this);
         setContentView(R.layout.activity_min_side);
         System.out.println(antBuckets);
+
+        shareDialog = new ShareDialog(this);
+        prepShare();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(bucketmotakker, new IntentFilter("antbuckets"));
         LocalBroadcastManager.getInstance(this).registerReceiver(itemsmotakker, new IntentFilter("antitems"));
@@ -226,6 +236,23 @@ public class MinSide extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    protected void prepShare() {
+        double progress = 0.00;
+        if(!TextUtils.isEmpty(antAccomplished) && !TextUtils.isEmpty(antItems)) {
+            double progAccomplished = Double.parseDouble(antAccomplished);
+            double progItems = Double.parseDouble(antItems);
+            progress = Math.round((progAccomplished / progItems) * 100);
+        }
+
+        ShareLinkContent content = new ShareLinkContent.Builder().setContentTitle("Buckets")
+                .setContentDescription("Hello my friends, I have just achieved " + antAccomplished + "/" + antItems + " goals on my bucketlist \n" +
+                        "Adding up to " + progress + "%")
+                .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                .build();
+        shareButton = (ShareButton) findViewById(R.id.fb_share_button);
+        shareButton.setShareContent(content);
     }
 
 }
