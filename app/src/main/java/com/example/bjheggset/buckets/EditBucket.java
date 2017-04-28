@@ -210,4 +210,11 @@ public class EditBucket extends AppCompatActivity {
 
         return true;
     }
+
+
+    // Gå tilbake til min side:
+    protected void goHome(View view){
+        Intent home = new Intent(this, MinSide.class);
+        startActivity(home);
+    }
 }

@@ -164,4 +164,9 @@ public class DetailsBucket extends Activity {
     }
 
 
+    // Gå tilbake til min side:
+    protected void goHome(View view){
+        Intent home = new Intent(this, MinSide.class);
+        startActivity(home);
+    }
 }
