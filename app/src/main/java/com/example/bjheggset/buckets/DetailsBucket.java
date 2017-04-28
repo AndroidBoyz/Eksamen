@@ -36,8 +36,9 @@ public class DetailsBucket extends Activity {
     Bucketlist valgt;
 
 
+
     List<Items> listen = new ArrayList<>();
-    List<Integer> accomplished = new ArrayList<>();
+    public static List<Integer> accomplished = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private DetailsBucketCA mAdapter;
@@ -144,7 +145,7 @@ public class DetailsBucket extends Activity {
 
     public void onItemClick(AdapterView parent, View v, int position, long id) {
         DetailsBucketCA adapter = (DetailsBucketCA) parent.getAdapter();
-       // Items item = adapter.getItemCount(position);
+        //Items item = adapter.getItemCount(position);
         String userID = Profile.getCurrentProfile().getId();
 
 
@@ -163,5 +164,8 @@ public class DetailsBucket extends Activity {
         startActivity(i);
     }
 
+    public static List<Integer> getAccomplishedList(){
+        return accomplished;
+    }
 
 }
