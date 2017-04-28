@@ -4,6 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.provider.CalendarContract;
 import android.support.v4.content.LocalBroadcastManager;
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +27,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class EditBucket extends AppCompatActivity {
     BackgroundWorker backgroundWorker;
@@ -75,7 +82,10 @@ public class EditBucket extends AppCompatActivity {
         final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, inFocus);
         listview.setAdapter(adapter);
 
-        if (inFocus == listeAlle) {
+        Button btnAcquired = (Button) findViewById(R.id.btnAcquired);
+        Button btnUnacquired = (Button) findViewById(R.id.btnUnacquired);
+
+        if (inFocus == listeAlle && listeAlle.size() > 0) { // Button 'unacquired' is selected
             listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
@@ -87,7 +97,9 @@ public class EditBucket extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 }
             });
-        } else {
+            btnUnacquired.setBackgroundColor(getResources().getColor(R.color.defaultSelected));
+            btnAcquired.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background));
+        } else if (inFocus == listeValgt) { // Button 'already added' is selected
             listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -100,6 +112,10 @@ public class EditBucket extends AppCompatActivity {
                 }
 
             });
+            btnAcquired.setBackgroundColor(getResources().getColor(R.color.defaultSelected));
+            btnUnacquired.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background));
+        } else {
+            fillList(inFocus); // Ingen lister har verdi fordi asynctask ikke er ferdig, kjør om igjen.
         }
     }
 
@@ -158,7 +174,16 @@ public class EditBucket extends AppCompatActivity {
     }
 
     protected void getUnacquired(View view){
-        new BackgroundWorker(this).execute("getUnacquired", userID, String.valueOf(bucketID));
+        AsyncTask bw = new BackgroundWorker(this).execute("getUnacquired", userID, String.valueOf(bucketID));
+        try {
+            bw.get(1000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void getAcquired(View view){
@@ -184,5 +209,12 @@ public class EditBucket extends AppCompatActivity {
         if (listeValgt.size() == 0) { return false; }
 
         return true;
+    }
+
+
+    // Gå tilbake til min side:
+    protected void goHome(View view){
+        Intent home = new Intent(this, MinSide.class);
+        startActivity(home);
     }
 }
