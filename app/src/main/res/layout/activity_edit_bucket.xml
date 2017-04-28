@@ -10,6 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.bjheggset.buckets.EditBucket">
 
+    <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +26,9 @@
         android:id="@+id/txtName"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:contentDescription="(Name)" />
+        android:hint="(Bucketlist name)"
+        android:nextFocusUp="@+id/txtName"
+        android:nextFocusLeft="@+id/txtName" />
 
     <Button
         android:text="Unacquired"
@@ -28,7 +37,7 @@
         android:layout_below="@+id/txtName"
         android:layout_alignParentStart="true"
         android:layout_marginTop="18dp"
-        android:id="@+id/btnNew"
+        android:id="@+id/btnUnacquired"
         android:layout_width="150dp" />
 
     <Button
@@ -36,13 +45,13 @@
         android:onClick="getAcquired"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnNew"
+        android:layout_alignTop="@+id/btnUnacquired"
         android:layout_alignParentEnd="true"
-        android:id="@+id/button3" />
+        android:id="@+id/btnAcquired" />
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_below="@+id/btnNew"
+        android:layout_below="@+id/btnUnacquired"
         android:layout_alignParentStart="true"
         android:layout_height="350dp"
         android:id="@+id/lstItems" />
